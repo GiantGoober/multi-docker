@@ -1,0 +1,23 @@
+sudo: required
+services:
+ - docker
+
+before_install:
+ - docker build -t garrickd/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+ - docker run garrickd/react-test npm test -- --watchAll=false
+
+after_success:
+ - docker build -t garrickd/multi-client ./client
+ - docker build -t garrickd/multi-nginx ./nginx
+ - docker build -t garrickd/multi-server ./server
+ - docker build -t garrickd/multi-worker ./worker
+
+#login into docker cli
+ - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+#push images to dockerhub
+ - docker push garrickd/multi-client
+ - docker push garrickd/multi-nginx
+ - docker push garrickd/multi-server
+ - docker push garrickd/multi-worker
