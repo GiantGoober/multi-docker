@@ -1,0 +1,35 @@
+{
+ "AWSEBDockerrunVersion": 2,
+ "containerDefinitions": [
+  {
+   "name": "client",
+   "image": "garrickd/multi-client",
+   "hostname": "client",
+   "essential": false
+  },
+  {
+   "name": "server",
+   "image": "garrickd/multi-server",
+   "hostname": "api",
+   "essential": false 
+  },
+  {
+   "name": "worker",
+   "image": "garrickd/multi-worker",
+   "hostname": "worker",
+   "essential": false 
+  },
+  {
+   "name": "nginx",
+   "image": "garrickd/multi-nginx",
+   "esential": true,
+   "portMappings": [
+    {
+     "hostPort": 80,
+     "conatinerPort": 80
+    }
+   ],
+   "links": ["client", "server"]
+  }
+ ]
+}
